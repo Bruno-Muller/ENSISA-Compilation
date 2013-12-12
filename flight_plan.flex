@@ -8,16 +8,15 @@
 
 %%
 [ \t\f]					{ }
-\r\n|\r|\n				{ return getSymbolFactory().newSymbol ("EOLN", Sym.EOLN); }
+";"						{ return getSymbolFactory().newSymbol ("TERM", Sym.TERM); }
 "="						{ return getSymbolFactory().newSymbol ("EQUAL", Sym.EQUAL); }
-"+"						{ return getSymbolFactory().newSymbol ("PLUS", Sym.PLUS); }
-"-"						{ return getSymbolFactory().newSymbol ("MINUS", Sym.MINUS); }
-"*"						{ return getSymbolFactory().newSymbol ("TIMES", Sym.TIMES); }
-"/"						{ return getSymbolFactory().newSymbol ("DIVIDE", Sym.DIVIDE); }
-"("						{ return getSymbolFactory().newSymbol ("LPAREN", Sym.LPAREN); }
-")"						{ return getSymbolFactory().newSymbol ("RPAREN", Sym.RPAREN); }
+"begin"					{ return getSymbolFactory().newSymbol ("BEGIN", Sym.BEGIN); }
+"end"					{ return getSymbolFactory().newSymbol ("END", Sym.END); }
+"new"					{ return getSymbolFactory().newSymbol ("NEW", Sym.NEW); }
+"."						{ return getSymbolFactory().newSymbol ("POINT", Sym.POINT); }
+"\""					{ return getSymbolFactory().newSymbol ("DOUBLE_QUOTE", Sym.DOUBLE_QUOTE); }   
    
-[0-9]+      			{ return getSymbolFactory().newSymbol ("NUMBER", Sym.NUMBER, new Integer(yytext())); }
-[A-Za-z_][A-Za-z_0-9]*	{ return getSymbolFactory().newSymbol ("ID", Sym.ID, new String(yytext())); }
+[A-Za-z_][A-Za-z_0-9]*	{ return getSymbolFactory().newSymbol ("KEY", Sym.KEY, new String(yytext())); }
+[A-Za-z_][A-Za-z_0-9]*	{ return getSymbolFactory().newSymbol ("VALUE", Sym.VALUE, new String(yytext())); }
    
 [^]                    { throw new Error("Illegal character <"+yytext()+">"); }
