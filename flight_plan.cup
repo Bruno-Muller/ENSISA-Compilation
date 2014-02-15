@@ -2,7 +2,7 @@ package chevalier_muller;
 
 import java.util.TreeMap;
 import java.util.Map;
-import chevalier_muller.model;
+import chevalier_muller.model.Model;
 
 parser code {:
     
@@ -33,17 +33,17 @@ parser code {:
 
 :}
 
-terminal String KEY;
-terminal VALUE
+terminal String ID;
+//terminal VALUE
 terminal BEGIN, END;  
-terminal TERM;
-terminal EQUAL;
-terminal POINT;
-terminal NEW;
-terminal DOUBLE_QUOTE;
+//terminal TERM;
+//terminal EQUAL;
+//terminal POINT;
+//terminal NEW;
+//terminal DOUBLE_QUOTE;
    
 nonterminal Model;
-nonterminal Entries, Entry;
+//nonterminal Entries, Entry;
 
 /*
 list	::=	
@@ -64,10 +64,10 @@ expr	::=	expr:e1	PLUS	expr:e2	{: RESULT = e1 + e2; :}
 		|	NUMBER:n				{: RESULT = n; :}
 		|	ID:n					{: RESULT = getValue(n); :}
 		;
+
 */
-
-model	::= BEGIN ID:id list END;
-
+Model	::= BEGIN ID:id END; //list END;
+/*
 entries	::= 
 		| entries entry TERM {: :}
 		;
@@ -76,4 +76,4 @@ entry	::=
 		| KEY:k TERM											{: Model.getInstance().put(k, null); :}
 		| KEY:k EQUAL VALUE:v TERM								{: Model.getInstance().put(k, v); :}
 		| KEY:k EQUAL DOUBLE_QUOTE VALUE:v DOUBLE_QUOTE TERM 	{: Model.getInstance().put(k, v); :}
-		;
+		;*/

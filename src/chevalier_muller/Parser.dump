@@ -3,14 +3,72 @@
 ===== STDOUT =====
 
 ===== Terminals =====
-[0]EOF [1]error [2]KEY [3]BEGIN [4]END 
-[5]TERM [6]EQUAL [7]POINT [8]NEW [9]DOUBLE_QUOTE 
+[0]EOF [1]error [2]ID [3]BEGIN [4]END 
 
 
 ===== Non terminals =====
-[0]Model [1]Entries [2]Entry 
+[0]Model 
 
 ===== Productions =====
+[0] Model ::= BEGIN ID END 
+[1] $START ::= Model EOF 
 ===== Viable Prefix Recognizer =====
-null
-null
+START lalr_state [0]: {
+  [$START ::= (*) Model EOF , {EOF }]
+  [Model ::= (*) BEGIN ID END , {EOF }]
+}
+transition on Model to state [2]
+transition on BEGIN to state [1]
+
+-------------------
+lalr_state [1]: {
+  [Model ::= BEGIN (*) ID END , {EOF }]
+}
+transition on ID to state [4]
+
+-------------------
+lalr_state [2]: {
+  [$START ::= Model (*) EOF , {EOF }]
+}
+transition on EOF to state [3]
+
+-------------------
+lalr_state [3]: {
+  [$START ::= Model EOF (*) , {EOF }]
+}
+
+-------------------
+lalr_state [4]: {
+  [Model ::= BEGIN ID (*) END , {EOF }]
+}
+transition on END to state [5]
+
+-------------------
+lalr_state [5]: {
+  [Model ::= BEGIN ID END (*) , {EOF }]
+}
+
+-------------------
+-------- ACTION_TABLE --------
+From state #0
+ [term 3:SHIFT(to state 1)]
+From state #1
+ [term 2:SHIFT(to state 4)]
+From state #2
+ [term 0:SHIFT(to state 3)]
+From state #3
+ [term 0:REDUCE(with prod 1)]
+From state #4
+ [term 4:SHIFT(to state 5)]
+From state #5
+ [term 0:REDUCE(with prod 0)]
+------------------------------
+-------- REDUCE_TABLE --------
+From state #0
+ [non term 0->state 2]
+From state #1
+From state #2
+From state #3
+From state #4
+From state #5
+-----------------------------
