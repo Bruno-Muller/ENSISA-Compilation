@@ -44,7 +44,7 @@ data_def		::=		VAR NAME:v TERM			{: System.out.println(v); :}
 
 structure_def	::= 	STRUCT data_defs END_STRUCT TERM;
 
-structure		::= 	NAME:structName EQUAL NEW NAME:structDefinitionName TERM 					{: Struct.createStruct((String) structName, (String) structDefinitionName); :}
+structure		::= 	NAME:structName EQUAL NEW NAME:structDefinitionName TERM 					{: Struct.createStruct((String) structName, (String) structDefinitionName); :};
 
 assignement		::=		NAME:strct POINT NAME:key EQUAL DOUBLE_QUOTE VALUE:val DOUBLE_QUOTE TERM 	{: Struct.getStruct((String) strct).putValue((String) key, (String) val); :}
 				|		NAME:strct POINT NAME:key EQUAL NAME:val TERM 									{: Struct.getStruct((String) strct).putPointer((String) key, (String) val); :}

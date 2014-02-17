@@ -23,7 +23,6 @@ public class Struct {
 	
 	private Struct(String structDefinitionName) {
 		this.dataType = new HashMap<String, DataType>();
-		this.dataValue = new HashMap<String, String>();
 		Struct.struct.put(structDefinitionName, this);
 	}
 	
