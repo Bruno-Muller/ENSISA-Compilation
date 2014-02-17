@@ -31,7 +31,7 @@ parser code {:
 :}
 
 terminal VAR, PTR;
-terminal NAME; //terminal VALUE, NAME;
+terminal String TEXT;
 terminal STRUCT, END_STRUCT;  
 terminal TERM;
 terminal EQUAL;
@@ -40,25 +40,33 @@ terminal NEW;
 terminal DOUBLE_QUOTE;
 terminal PRINT;
    
-nonterminal structure_def, data_defs, data_def;
-nonterminal structure, assignement;
-nonterminal to_string;
+nonterminal StructureModel, DataModels, DataModel;
+nonterminal String Words, QuotedWords, Label;
+nonterminal Structure, Assignement;
+nonterminal ToString;
 
+Label			::= 	TEXT:text					{: RESULT = text; :} ;
 
-data_defs		::=	
-				|		data_defs data_def TERM
-				;
-
-data_def		::=		VAR NAME:val TERM			{: getStructModel().putValue((String) val); :}
-				|		PTR NAME:pntr TERM			{: getStructModel().putPointer((String) pntr); :}
-				;
-
-structure_def	::= 	STRUCT NAME:structModelName data_defs END_STRUCT		{: System.out.println("STRUCT MODEL: " + (String) structModelName); createStructModel((String) structModelName); :};
-
-structure		::= 	NAME:structName EQUAL NEW NAME:structModelName TERM 								{: Struct.createStruct((String) structName, (String) structModelName); :};
-
-assignement		::=		NAME:structName POINT NAME:key EQUAL DOUBLE_QUOTE NAME:val DOUBLE_QUOTE TERM 		{: Struct.getStruct((String) structName).put((String) key, (String) val); :}
-				|		NAME:structName POINT NAME:key EQUAL NAME:val TERM 									{: Struct.getStruct((String) structName).put((String) key, (String) val); :}
+Words			::= 								{: RESULT = ""; :}
+				|		Words:words TEXT:text		{: RESULT = words + " " + text; :}
 				;
 				
-to_string		::= 	PRINT NAME:n TERM		{: System.out.println(Struct.getStruct((String) n).toString()); :};
+QuotedWords		::=		DOUBLE_QUOTE Words:words DOUBLE_QUOTE	{: RESULT = words; :} ;
+
+DataModels		::=	
+				|		DataModels DataModel
+				;		
+
+DataModel		::=		VAR Label:label TERM			{: getStructModel().putValue(label); :}
+				|		PTR Label:label TERM			{: getStructModel().putPointer(label); :}
+				;
+
+StructureModel	::= 	STRUCT Label:structModelName DataModels END_STRUCT			{: createStructModel(structModelName); :};
+
+Structure		::= 	Label:structName EQUAL NEW Label:structModelName TERM		{: Struct.createStruct(structName, structModelName); :};
+
+Assignement		::=		Label:structName POINT Label:key EQUAL QuotedWords:val TERM	{: Struct.getStruct(structName).put(key, val); :}
+				|		Label:structName POINT Label:key EQUAL Label:val TERM		{: Struct.getStruct(structName).put(key, val); :}
+				;
+				
+ToString		::= 	PRINT Label:label TERM		{: System.out.println(Struct.getStruct(label).toString()); :};
