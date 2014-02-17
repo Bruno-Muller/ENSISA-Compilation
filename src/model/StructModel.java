@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class StructModel {
 	
 	protected HashMap<String, DataType> dataType;
-	protected static HashMap<String, StructModel> struct;
+	protected static HashMap<String, StructModel> struct = new HashMap<String, StructModel>();
 	
 	public static StructModel getStruct(String name) {
 		return StructModel.struct.get(name);
