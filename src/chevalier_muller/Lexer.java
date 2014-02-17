@@ -24,7 +24,7 @@ class Lexer implements java_cup.runtime.Scanner {
    * Translates characters to character classes
    */
   private static final char [] ZZ_CMAP = {
-     0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  1,  0,  0,  0, 
+     0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  0,  0,  1,  0,  0, 
      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 
      1,  0, 17,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 16,  0, 
     21, 21, 21, 21, 21, 21, 21, 21, 21, 21,  0,  2,  0,  3,  0,  0, 

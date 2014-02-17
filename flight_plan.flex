@@ -7,7 +7,8 @@
 %cup
 
 %%
-[ \t\f]						{ }
+[ \t\n\r]		{ }
+
 ";"							{ return getSymbolFactory().newSymbol ("TERM", Sym.TERM); }
 "="							{ return getSymbolFactory().newSymbol ("EQUAL", Sym.EQUAL); }
 "STRUCT"					{ return getSymbolFactory().newSymbol ("STRUCT", Sym.STRUCT); }
