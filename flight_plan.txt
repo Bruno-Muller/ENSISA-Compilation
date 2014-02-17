@@ -1,4 +1,63 @@
-BEGIN pilot
+STRUCT Pilot
+	VAR lastname;
+	VAR firstname;
+END_STRUCT;
+
+STRUCT Plane
+	VAR type;
+	VAR immat;
+	VAR seats;
+END_STRUCT;
+
+STRCUT Airport
+	VAR oaci
+	VAR name
+END_STRUCT;
 
 
-END
+STRUCT Company
+	VAR name;
+END_STRUCT;
+
+STRUCT FlightPlan
+	PTR company;
+	PTR airportDeparture;
+	PTR airportArrival;
+	PTR airportArrivalBis;
+	PTR pilot;
+END_STRCUT
+
+plane1 = new Plane;
+plane1.type = "Jodel D112";
+plane1.immat = "F-PFET";
+plane1.seats = 2;
+
+pilot1 = new Pilot;
+pilot1.lastname = "Chevalier";
+pilot1.firstname = "Simon";
+pilot1.plane = plane1;
+
+company1 = new Company;
+company1.name = "Aeroclub Sud Alsace";
+
+airport1 = new Airport;
+airport1.oaci = "LFGB";
+airport1.name = "Mulhouse Habsheim";
+
+airport2 = new Airport;
+airport2.oaci = "LFGG";
+airport2.name = "Belfort Chaux";
+
+airport3 = new Airport;
+airport3.oaci = "LFSB";
+airport3.name = "Bale Mulhouse";
+
+flightPlan1 = new FlightPlan;
+flightPlan1.company = company1;
+flightPlan1.airportDeparture = airport1;
+flightPlan1.airportArrival = airport2;
+flightPlan1.airportArrivalBis = airport2;
+flightPlan1.pilot = pilot1;
+flightPlan1.plane = plane1;
+
+PRINT flightPlan1

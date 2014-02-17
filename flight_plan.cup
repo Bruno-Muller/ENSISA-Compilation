@@ -1,8 +1,7 @@
 package chevalier_muller;
 
-import java.util.TreeMap;
-import java.util.Map;
-import chevalier_muller.model.Model;
+import model.DataType;
+import model.Struct;
 
 parser code {:
     
@@ -18,62 +17,37 @@ parser code {:
         System.exit(1);
     }
 
-	private Map<String, Integer> values = new TreeMap<String, Integer> ();
-
-	public void setValue (String name, int value) {
-		values.put(name, new Integer (value));
-	}
-	
-	public int getValue (String name) {
-		int value = 0;
-		if (values.containsKey(name))
-			value = values.get(name).intValue();
-		return value;
-	}
-
 :}
 
-terminal String ID;
-//terminal VALUE
-terminal BEGIN, END;  
-//terminal TERM;
-//terminal EQUAL;
-//terminal POINT;
-//terminal NEW;
-//terminal DOUBLE_QUOTE;
+terminal VAR, PTR;
+terminal VALUE, NAME;
+terminal STRUCT, END_STRUCT;  
+terminal TERM;
+terminal EQUAL;
+terminal POINT;
+terminal NEW;
+terminal DOUBLE_QUOTE;
+terminal PRINT;
    
-nonterminal Model;
-//nonterminal Entries, Entry;
+nonterminal structure_def, data_defs, data_def;
+nonterminal structure, assignement;
+nonterminal to_string;
 
-/*
-list	::=	
-		|	list instr EOLN
-		;
 
-instr	::=	ID:n EQUAL expr:e		{: setValue (n, e); :}
-		|	expr:e					{: System.out.println (e); :}
-		;
+data_defs		::=	
+				|		data_defs data_def TERM
+				;
 
-expr	::=	expr:e1	PLUS	expr:e2	{: RESULT = e1 + e2; :}
-		|	expr:e1	MINUS	expr:e2	{: RESULT = e1 - e2; :}
-		|	expr:e1	TIMES	expr:e2	{: RESULT = e1 * e2; :}
-		|	expr:e1	DIVIDE	expr:e2	{: RESULT = e1 / e2; :}
-		|	MINUS	expr:e			{: RESULT = - e; :} %prec UMINUS
-		|	PLUS	expr:e			{: RESULT = + e; :} %prec UPLUS
-		|	LPAREN	expr:e	RPAREN	{: RESULT = e; :}
-		|	NUMBER:n				{: RESULT = n; :}
-		|	ID:n					{: RESULT = getValue(n); :}
-		;
+data_def		::=		VAR NAME:v TERM			{: System.out.println(v); :}
+				|		PTR NAME:v TERM			{: System.out.println(v); :}
+				;
 
-*/
-Model	::= BEGIN ID:id END; //list END;
-/*
-entries	::= 
-		| entries entry TERM {: :}
-		;
+structure_def	::= 	STRUCT data_defs END_STRUCT TERM;
 
-entry	::=
-		| KEY:k TERM											{: Model.getInstance().put(k, null); :}
-		| KEY:k EQUAL VALUE:v TERM								{: Model.getInstance().put(k, v); :}
-		| KEY:k EQUAL DOUBLE_QUOTE VALUE:v DOUBLE_QUOTE TERM 	{: Model.getInstance().put(k, v); :}
-		;*/
+structure		::= 	NAME EQUAL NEW NAME TERM;
+
+assignement		::=		NAME POINT NAME EQUAL DOUBLE_QUOTE VALUE DOUBLE_QUOTE TERM;
+				|		NAME POINT NAME EQUAL NAME TERM;
+				;
+				
+to_string		::= 	PRINT NAME TERM;

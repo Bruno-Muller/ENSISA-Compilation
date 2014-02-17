@@ -3,72 +3,24 @@
 ===== STDOUT =====
 
 ===== Terminals =====
-[0]EOF [1]error [2]ID [3]BEGIN [4]END 
-
+[0]EOF [1]error [2]VAR [3]PTR [4]VALUE 
+[5]NAME [6]STRUCT [7]END_STRUCT [8]TERM [9]EQUAL 
+[10]POINT [11]NEW [12]DOUBLE_QUOTE [13]PRINT 
 
 ===== Non terminals =====
-[0]Model 
+[0]structure_def [1]data_defs [2]data_def [3]structure [4]assignement 
+[5]to_string 
 
 ===== Productions =====
-[0] Model ::= BEGIN ID END 
-[1] $START ::= Model EOF 
+[0] data_defs ::= 
+[1] $START ::= data_defs EOF 
+[2] data_defs ::= data_defs data_def TERM 
+[3] data_def ::= VAR NAME TERM 
+[4] data_def ::= PTR NAME TERM 
+[5] structure_def ::= STRUCT data_defs END_STRUCT TERM 
+[6] structure ::= NAME EQUAL NEW NAME TERM 
+[7] assignement ::= NAME POINT NAME EQUAL DOUBLE_QUOTE VALUE DOUBLE_QUOTE TERM 
+[8] to_string ::= PRINT NAME TERM 
 ===== Viable Prefix Recognizer =====
-START lalr_state [0]: {
-  [$START ::= (*) Model EOF , {EOF }]
-  [Model ::= (*) BEGIN ID END , {EOF }]
-}
-transition on Model to state [2]
-transition on BEGIN to state [1]
-
--------------------
-lalr_state [1]: {
-  [Model ::= BEGIN (*) ID END , {EOF }]
-}
-transition on ID to state [4]
-
--------------------
-lalr_state [2]: {
-  [$START ::= Model (*) EOF , {EOF }]
-}
-transition on EOF to state [3]
-
--------------------
-lalr_state [3]: {
-  [$START ::= Model EOF (*) , {EOF }]
-}
-
--------------------
-lalr_state [4]: {
-  [Model ::= BEGIN ID (*) END , {EOF }]
-}
-transition on END to state [5]
-
--------------------
-lalr_state [5]: {
-  [Model ::= BEGIN ID END (*) , {EOF }]
-}
-
--------------------
--------- ACTION_TABLE --------
-From state #0
- [term 3:SHIFT(to state 1)]
-From state #1
- [term 2:SHIFT(to state 4)]
-From state #2
- [term 0:SHIFT(to state 3)]
-From state #3
- [term 0:REDUCE(with prod 1)]
-From state #4
- [term 4:SHIFT(to state 5)]
-From state #5
- [term 0:REDUCE(with prod 0)]
-------------------------------
--------- REDUCE_TABLE --------
-From state #0
- [non term 0->state 2]
-From state #1
-From state #2
-From state #3
-From state #4
-From state #5
------------------------------
+null
+null
