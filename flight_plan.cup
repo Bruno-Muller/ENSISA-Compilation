@@ -1,6 +1,5 @@
 package chevalier_muller;
 
-import model.DataType;
 import model.StructModel;
 import model.Struct;
 
@@ -32,7 +31,7 @@ parser code {:
 :}
 
 terminal VAR, PTR;
-terminal VALUE, NAME;
+terminal NAME; //terminal VALUE, NAME;
 terminal STRUCT, END_STRUCT;  
 terminal TERM;
 terminal EQUAL;
@@ -51,14 +50,14 @@ data_defs		::=
 				;
 
 data_def		::=		VAR NAME:val TERM			{: getStructModel().putValue((String) val); :}
-				|		PTR NAME:pntr TERM			{: getStructModel().putValue((String) pntr); :}
+				|		PTR NAME:pntr TERM			{: getStructModel().putPointer((String) pntr); :}
 				;
 
-structure_def	::= 	STRUCT NAME:structModelName data_defs END_STRUCT TERM 		{: createStructModel((String) structModelName); :};
+structure_def	::= 	STRUCT NAME:structModelName data_defs END_STRUCT		{: System.out.println("STRUCT MODEL: " + (String) structModelName); createStructModel((String) structModelName); :};
 
 structure		::= 	NAME:structName EQUAL NEW NAME:structModelName TERM 								{: Struct.createStruct((String) structName, (String) structModelName); :};
 
-assignement		::=		NAME:structName POINT NAME:key EQUAL DOUBLE_QUOTE VALUE:val DOUBLE_QUOTE TERM 		{: Struct.getStruct((String) structName).put((String) key, (String) val); :}
+assignement		::=		NAME:structName POINT NAME:key EQUAL DOUBLE_QUOTE NAME:val DOUBLE_QUOTE TERM 		{: Struct.getStruct((String) structName).put((String) key, (String) val); :}
 				|		NAME:structName POINT NAME:key EQUAL NAME:val TERM 									{: Struct.getStruct((String) structName).put((String) key, (String) val); :}
 				;
 				

@@ -3,9 +3,9 @@
 ===== STDOUT =====
 
 ===== Terminals =====
-[0]EOF [1]error [2]VAR [3]PTR [4]VALUE 
-[5]NAME [6]STRUCT [7]END_STRUCT [8]TERM [9]EQUAL 
-[10]POINT [11]NEW [12]DOUBLE_QUOTE [13]PRINT 
+[0]EOF [1]error [2]VAR [3]PTR [4]NAME 
+[5]STRUCT [6]END_STRUCT [7]TERM [8]EQUAL [9]POINT 
+[10]NEW [11]DOUBLE_QUOTE [12]PRINT 
 
 ===== Non terminals =====
 [0]structure_def [1]data_defs [2]data_def [3]structure [4]assignement 
@@ -17,9 +17,9 @@
 [2] data_defs ::= data_defs data_def TERM 
 [3] data_def ::= VAR NAME TERM 
 [4] data_def ::= PTR NAME TERM 
-[5] structure_def ::= STRUCT NAME data_defs END_STRUCT TERM 
+[5] structure_def ::= STRUCT NAME data_defs END_STRUCT 
 [6] structure ::= NAME EQUAL NEW NAME TERM 
-[7] assignement ::= NAME POINT NAME EQUAL DOUBLE_QUOTE VALUE DOUBLE_QUOTE TERM 
+[7] assignement ::= NAME POINT NAME EQUAL DOUBLE_QUOTE NAME DOUBLE_QUOTE TERM 
 [8] assignement ::= NAME POINT NAME EQUAL NAME TERM 
 [9] to_string ::= PRINT NAME TERM 
 ===== Viable Prefix Recognizer =====
@@ -101,24 +101,24 @@ From state #1
  [term 0:SHIFT(to state 5)] [term 2:SHIFT(to state 2)]
  [term 3:SHIFT(to state 3)]
 From state #2
- [term 5:SHIFT(to state 9)]
+ [term 4:SHIFT(to state 9)]
 From state #3
- [term 5:SHIFT(to state 7)]
+ [term 4:SHIFT(to state 7)]
 From state #4
- [term 8:SHIFT(to state 6)]
+ [term 7:SHIFT(to state 6)]
 From state #5
  [term 0:REDUCE(with prod 1)]
 From state #6
  [term 0:REDUCE(with prod 2)] [term 2:REDUCE(with prod 2)]
  [term 3:REDUCE(with prod 2)]
 From state #7
- [term 8:SHIFT(to state 8)]
+ [term 7:SHIFT(to state 8)]
 From state #8
- [term 8:REDUCE(with prod 4)]
+ [term 7:REDUCE(with prod 4)]
 From state #9
- [term 8:SHIFT(to state 10)]
+ [term 7:SHIFT(to state 10)]
 From state #10
- [term 8:REDUCE(with prod 3)]
+ [term 7:REDUCE(with prod 3)]
 ------------------------------
 -------- REDUCE_TABLE --------
 From state #0
