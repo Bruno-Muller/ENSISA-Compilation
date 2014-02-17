@@ -2,46 +2,25 @@ package model;
 
 import java.util.HashMap;
 
-public class Struct {
+public class Struct extends StructModel {
 	
-	private HashMap<String, DataType> dataType;
 	private HashMap<String, String> dataValue;
-	
-	private static HashMap<String, Struct> struct;
-	
-	public static Struct getStruct(String name) {
-		return Struct.struct.get(name);
+
+	public static Struct createStruct(String structName, String structModelName) {
+		return new Struct(structName, structModelName);
 	}
 	
-	public static Struct createStructDefinition(String structDefinitionName) {
-		return new Struct(structDefinitionName);
+	public static Struct getStruct(String structName) {
+		return (Struct) StructModel.getStruct(structName);
 	}
 	
-	public static Struct createStruct(String structName, String structDefinitionName) {
-		return new Struct(structName, structDefinitionName);
-	}
-	
-	private Struct(String structDefinitionName) {
-		this.dataType = new HashMap<String, DataType>();
-		Struct.struct.put(structDefinitionName, this);
-	}
-	
-	private Struct(String structName, String structDefinitionName) {
-		this.dataType = new HashMap<String, DataType>();
-		// TODO recopier les datatype de structDefinitionName dans structName
-		
+	private Struct(String structName, String structModelName) {
+		super(StructModel.getStruct(structModelName));
 		this.dataValue = new HashMap<String, String>();
-		
 		Struct.struct.put(structName, this);
 	}
-
-	public void putValue(String key, String value) {
-		this.dataType.put(key, DataType.VAR);
-		this.dataValue.put(key, value);
-	}
 	
-	public void putPointer(String key, String value) {
-		this.dataType.put(key, DataType.PTR);
+	public void put(String key, String value) {
 		this.dataValue.put(key, value);
 	}
 	
