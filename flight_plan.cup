@@ -44,10 +44,10 @@ data_def		::=		VAR NAME:v TERM			{: System.out.println(v); :}
 
 structure_def	::= 	STRUCT data_defs END_STRUCT TERM;
 
-structure		::= 	NAME EQUAL NEW NAME TERM;
+structure		::= 	NAME:structName EQUAL NEW NAME:structDefinitionName TERM 					{: Struct.createStruct((String) structName, (String) structDefinitionName); :}
 
-assignement		::=		NAME POINT NAME EQUAL DOUBLE_QUOTE VALUE DOUBLE_QUOTE TERM
-				|		NAME POINT NAME EQUAL NAME TERM
+assignement		::=		NAME:strct POINT NAME:key EQUAL DOUBLE_QUOTE VALUE:val DOUBLE_QUOTE TERM 	{: Struct.getStruct((String) strct).putValue((String) key, (String) val); :}
+				|		NAME:strct POINT NAME:key EQUAL NAME:val TERM 									{: Struct.getStruct((String) strct).putPointer((String) key, (String) val); :}
 				;
 				
-to_string		::= 	PRINT NAME TERM;
+to_string		::= 	PRINT NAME:n TERM	{: System.out.println(Struct.getStruct((String) n).toString()); :};
