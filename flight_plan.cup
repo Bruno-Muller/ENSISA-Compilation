@@ -5,6 +5,8 @@ import model.StructModel;
 import model.Struct;
 
 parser code {:
+
+	private StructModel currentStructModel = null;
     
     public void report_error(String message, Object info) {
         StringBuffer m = new StringBuffer("Error");
@@ -16,6 +18,15 @@ parser code {:
     public void report_fatal_error(String message, Object info) {
         report_error(message, info);
         System.exit(1);
+    }
+    
+    public StructModel createStructModel(String name) {
+    	this.currentStructModel = StructModel.createStructModel(name);
+    	return this.currentStructModel;
+    }
+    
+    public StructModel getStructModel() {
+    	return this.currentStructModel;
     }
 
 :}
@@ -39,16 +50,16 @@ data_defs		::=
 				|		data_defs data_def TERM
 				;
 
-data_def		::=		VAR NAME:v TERM			{: System.out.println(v); :}
-				|		PTR NAME:v TERM			{: System.out.println(v); :}
+data_def		::=		VAR NAME:val TERM			{: getStructModel().putValue((String) val); :}
+				|		PTR NAME:pntr TERM			{: getStructModel().putValue((String) pntr); :}
 				;
 
-structure_def	::= 	STRUCT data_defs END_STRUCT TERM;
+structure_def	::= 	STRUCT NAME:structModelName data_defs END_STRUCT TERM 		{: createStructModel((String) structModelName); :};
 
-structure		::= 	NAME:structName EQUAL NEW NAME:structModelName TERM 					{: Struct.createStruct((String) structName, (String) structModelName); :};
+structure		::= 	NAME:structName EQUAL NEW NAME:structModelName TERM 								{: Struct.createStruct((String) structName, (String) structModelName); :};
 
 assignement		::=		NAME:structName POINT NAME:key EQUAL DOUBLE_QUOTE VALUE:val DOUBLE_QUOTE TERM 		{: Struct.getStruct((String) structName).put((String) key, (String) val); :}
 				|		NAME:structName POINT NAME:key EQUAL NAME:val TERM 									{: Struct.getStruct((String) structName).put((String) key, (String) val); :}
 				;
 				
-to_string		::= 	PRINT NAME:n TERM	{: System.out.println(Struct.getStruct((String) n).toString()); :};
+to_string		::= 	PRINT NAME:n TERM		{: System.out.println(Struct.getStruct((String) n).toString()); :};

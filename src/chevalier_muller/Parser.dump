@@ -17,7 +17,7 @@
 [2] data_defs ::= data_defs data_def TERM 
 [3] data_def ::= VAR NAME TERM 
 [4] data_def ::= PTR NAME TERM 
-[5] structure_def ::= STRUCT data_defs END_STRUCT TERM 
+[5] structure_def ::= STRUCT NAME data_defs END_STRUCT TERM 
 [6] structure ::= NAME EQUAL NEW NAME TERM 
 [7] assignement ::= NAME POINT NAME EQUAL DOUBLE_QUOTE VALUE DOUBLE_QUOTE TERM 
 [8] assignement ::= NAME POINT NAME EQUAL NAME TERM 
