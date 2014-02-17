@@ -20,7 +20,8 @@
 [5] structure_def ::= STRUCT data_defs END_STRUCT TERM 
 [6] structure ::= NAME EQUAL NEW NAME TERM 
 [7] assignement ::= NAME POINT NAME EQUAL DOUBLE_QUOTE VALUE DOUBLE_QUOTE TERM 
-[8] to_string ::= PRINT NAME TERM 
+[8] assignement ::= NAME POINT NAME EQUAL NAME TERM 
+[9] to_string ::= PRINT NAME TERM 
 ===== Viable Prefix Recognizer =====
 null
 null

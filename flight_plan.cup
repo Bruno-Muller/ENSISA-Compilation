@@ -35,7 +35,7 @@ nonterminal to_string;
 
 
 data_defs		::=	
-				|		data_defs data_def TERM
+				|		data_defs data_def TERM;
 				;
 
 data_def		::=		VAR NAME:v TERM			{: System.out.println(v); :}
@@ -46,8 +46,8 @@ structure_def	::= 	STRUCT data_defs END_STRUCT TERM;
 
 structure		::= 	NAME EQUAL NEW NAME TERM;
 
-assignement		::=		NAME POINT NAME EQUAL DOUBLE_QUOTE VALUE DOUBLE_QUOTE TERM;
-				|		NAME POINT NAME EQUAL NAME TERM;
+assignement		::=		NAME POINT NAME EQUAL DOUBLE_QUOTE VALUE DOUBLE_QUOTE TERM
+				|		NAME POINT NAME EQUAL NAME TERM
 				;
 				
 to_string		::= 	PRINT NAME TERM;
