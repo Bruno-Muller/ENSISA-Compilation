@@ -23,5 +23,115 @@
 [8] assignement ::= NAME POINT NAME EQUAL NAME TERM 
 [9] to_string ::= PRINT NAME TERM 
 ===== Viable Prefix Recognizer =====
-null
-null
+START lalr_state [0]: {
+  [data_defs ::= (*) data_defs data_def TERM , {EOF VAR PTR }]
+  [$START ::= (*) data_defs EOF , {EOF }]
+  [data_defs ::= (*) , {EOF VAR PTR }]
+}
+transition on data_defs to state [1]
+
+-------------------
+lalr_state [1]: {
+  [data_defs ::= data_defs (*) data_def TERM , {EOF VAR PTR }]
+  [data_def ::= (*) PTR NAME TERM , {TERM }]
+  [$START ::= data_defs (*) EOF , {EOF }]
+  [data_def ::= (*) VAR NAME TERM , {TERM }]
+}
+transition on EOF to state [5]
+transition on data_def to state [4]
+transition on PTR to state [3]
+transition on VAR to state [2]
+
+-------------------
+lalr_state [2]: {
+  [data_def ::= VAR (*) NAME TERM , {TERM }]
+}
+transition on NAME to state [9]
+
+-------------------
+lalr_state [3]: {
+  [data_def ::= PTR (*) NAME TERM , {TERM }]
+}
+transition on NAME to state [7]
+
+-------------------
+lalr_state [4]: {
+  [data_defs ::= data_defs data_def (*) TERM , {EOF VAR PTR }]
+}
+transition on TERM to state [6]
+
+-------------------
+lalr_state [5]: {
+  [$START ::= data_defs EOF (*) , {EOF }]
+}
+
+-------------------
+lalr_state [6]: {
+  [data_defs ::= data_defs data_def TERM (*) , {EOF VAR PTR }]
+}
+
+-------------------
+lalr_state [7]: {
+  [data_def ::= PTR NAME (*) TERM , {TERM }]
+}
+transition on TERM to state [8]
+
+-------------------
+lalr_state [8]: {
+  [data_def ::= PTR NAME TERM (*) , {TERM }]
+}
+
+-------------------
+lalr_state [9]: {
+  [data_def ::= VAR NAME (*) TERM , {TERM }]
+}
+transition on TERM to state [10]
+
+-------------------
+lalr_state [10]: {
+  [data_def ::= VAR NAME TERM (*) , {TERM }]
+}
+
+-------------------
+-------- ACTION_TABLE --------
+From state #0
+ [term 0:REDUCE(with prod 0)] [term 2:REDUCE(with prod 0)]
+ [term 3:REDUCE(with prod 0)]
+From state #1
+ [term 0:SHIFT(to state 5)] [term 2:SHIFT(to state 2)]
+ [term 3:SHIFT(to state 3)]
+From state #2
+ [term 5:SHIFT(to state 9)]
+From state #3
+ [term 5:SHIFT(to state 7)]
+From state #4
+ [term 8:SHIFT(to state 6)]
+From state #5
+ [term 0:REDUCE(with prod 1)]
+From state #6
+ [term 0:REDUCE(with prod 2)] [term 2:REDUCE(with prod 2)]
+ [term 3:REDUCE(with prod 2)]
+From state #7
+ [term 8:SHIFT(to state 8)]
+From state #8
+ [term 8:REDUCE(with prod 4)]
+From state #9
+ [term 8:SHIFT(to state 10)]
+From state #10
+ [term 8:REDUCE(with prod 3)]
+------------------------------
+-------- REDUCE_TABLE --------
+From state #0
+ [non term 1->state 1]
+From state #1
+ [non term 2->state 4]
+From state #2
+From state #3
+From state #4
+From state #5
+From state #6
+From state #7
+From state #8
+From state #9
+From state #10
+-----------------------------
