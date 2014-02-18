@@ -25,32 +25,32 @@ STRUCT FlightPlan
 	PTR airportArrival;
 	PTR airportArrivalBis;
 	PTR pilot;
+	PTR plane;
 END_STRUCT
 
 plane1 = NEW Plane;
-plane1.type = "Jodel_D112";
+plane1.type = "Jodel D112";
 plane1.immat = "F-PFET";
 plane1.seats = "2";
 
 pilot1 = NEW Pilot;
 pilot1.lastname = "Chevalier";
 pilot1.firstname = "Simon";
-pilot1.plane = plane1;
 
 company1 = NEW Company;
-company1.name = "Aeroclub_Sud_Alsace";
+company1.name = "Aeroclub Sud Alsace";
 
 airport1 = NEW Airport;
 airport1.oaci = "LFGB";
-airport1.name = "Mulhouse_Habsheim";
+airport1.name = "Mulhouse Habsheim";
 
 airport2 = NEW Airport;
 airport2.oaci = "LFGG";
-airport2.name = "Belfort_Chaux";
+airport2.name = "Belfort Chaux";
 
 airport3 = NEW Airport;
 airport3.oaci = "LFSB";
-airport3.name = "Bale_Mulhouse";
+airport3.name = "Bale Mulhouse";
 
 flightPlan1 = NEW FlightPlan;
 flightPlan1.company = company1;

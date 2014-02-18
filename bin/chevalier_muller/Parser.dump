@@ -8,63 +8,470 @@
 [10]NEW [11]DOUBLE_QUOTE [12]PRINT 
 
 ===== Non terminals =====
-[0]StructureModel [1]DataModels [2]DataModel [3]Words [4]QuotedWords 
-[5]Label [6]Structure [7]Assignement [8]ToString 
+[0]file [1]instance [2]structModels [3]structModel [4]dataModels 
+[5]dataModel [6]instances [7]words [8]quotedWords [9]label 
+[10]print [11]instanciation [12]assignement 
 
 ===== Productions =====
-[0] Label ::= TEXT 
-[1] $START ::= Label EOF 
-[2] Words ::= 
-[3] Words ::= Words TEXT 
-[4] QuotedWords ::= DOUBLE_QUOTE Words DOUBLE_QUOTE 
-[5] DataModels ::= 
-[6] DataModels ::= DataModels DataModel 
-[7] DataModel ::= VAR Label TERM 
-[8] DataModel ::= PTR Label TERM 
-[9] StructureModel ::= STRUCT Label DataModels END_STRUCT 
-[10] Structure ::= Label EQUAL NEW Label TERM 
-[11] Assignement ::= Label POINT Label EQUAL QuotedWords TERM 
-[12] Assignement ::= Label POINT Label EQUAL Label TERM 
-[13] ToString ::= PRINT Label TERM 
+[0] file ::= structModels instances print 
+[1] $START ::= file EOF 
+[2] instances ::= 
+[3] instances ::= instances instance 
+[4] instance ::= instanciation 
+[5] instance ::= assignement 
+[6] label ::= TEXT 
+[7] words ::= 
+[8] words ::= words TEXT 
+[9] quotedWords ::= DOUBLE_QUOTE words DOUBLE_QUOTE 
+[10] dataModels ::= 
+[11] dataModels ::= dataModels dataModel 
+[12] dataModel ::= VAR label TERM 
+[13] dataModel ::= PTR label TERM 
+[14] structModel ::= STRUCT label dataModels END_STRUCT 
+[15] structModels ::= 
+[16] structModels ::= structModels structModel 
+[17] instanciation ::= label EQUAL NEW label TERM 
+[18] assignement ::= label POINT label EQUAL quotedWords TERM 
+[19] assignement ::= label POINT label EQUAL label TERM 
+[20] print ::= PRINT label TERM 
 ===== Viable Prefix Recognizer =====
 START lalr_state [0]: {
-  [$START ::= (*) Label EOF , {EOF }]
-  [Label ::= (*) TEXT , {EOF }]
+  [structModels ::= (*) structModels structModel , {TEXT STRUCT PRINT }]
+  [structModels ::= (*) , {TEXT STRUCT PRINT }]
+  [$START ::= (*) file EOF , {EOF }]
+  [file ::= (*) structModels instances print , {EOF }]
 }
-transition on Label to state [2]
-transition on TEXT to state [1]
+transition on structModels to state [2]
+transition on file to state [1]
 
 -------------------
 lalr_state [1]: {
-  [Label ::= TEXT (*) , {EOF }]
+  [$START ::= file (*) EOF , {EOF }]
 }
+transition on EOF to state [40]
 
 -------------------
 lalr_state [2]: {
-  [$START ::= Label (*) EOF , {EOF }]
+  [structModels ::= structModels (*) structModel , {TEXT STRUCT PRINT }]
+  [instances ::= (*) , {TEXT PRINT }]
+  [instances ::= (*) instances instance , {TEXT PRINT }]
+  [structModel ::= (*) STRUCT label dataModels END_STRUCT , {TEXT STRUCT PRINT }]
+  [file ::= structModels (*) instances print , {EOF }]
 }
-transition on EOF to state [3]
+transition on instances to state [5]
+transition on STRUCT to state [4]
+transition on structModel to state [3]
 
 -------------------
 lalr_state [3]: {
-  [$START ::= Label EOF (*) , {EOF }]
+  [structModels ::= structModels structModel (*) , {TEXT STRUCT PRINT }]
+}
+
+-------------------
+lalr_state [4]: {
+  [label ::= (*) TEXT , {VAR PTR END_STRUCT }]
+  [structModel ::= STRUCT (*) label dataModels END_STRUCT , {TEXT STRUCT PRINT }]
+}
+transition on TEXT to state [9]
+transition on label to state [30]
+
+-------------------
+lalr_state [5]: {
+  [print ::= (*) PRINT label TERM , {EOF }]
+  [instanciation ::= (*) label EQUAL NEW label TERM , {TEXT PRINT }]
+  [instance ::= (*) assignement , {TEXT PRINT }]
+  [assignement ::= (*) label POINT label EQUAL label TERM , {TEXT PRINT }]
+  [instance ::= (*) instanciation , {TEXT PRINT }]
+  [assignement ::= (*) label POINT label EQUAL quotedWords TERM , {TEXT PRINT }]
+  [instances ::= instances (*) instance , {TEXT PRINT }]
+  [file ::= structModels instances (*) print , {EOF }]
+  [label ::= (*) TEXT , {EQUAL POINT }]
+}
+transition on assignement to state [12]
+transition on label to state [11]
+transition on instanciation to state [10]
+transition on TEXT to state [9]
+transition on PRINT to state [8]
+transition on print to state [7]
+transition on instance to state [6]
+
+-------------------
+lalr_state [6]: {
+  [instances ::= instances instance (*) , {TEXT PRINT }]
+}
+
+-------------------
+lalr_state [7]: {
+  [file ::= structModels instances print (*) , {EOF }]
+}
+
+-------------------
+lalr_state [8]: {
+  [print ::= PRINT (*) label TERM , {EOF }]
+  [label ::= (*) TEXT , {TERM }]
+}
+transition on label to state [28]
+transition on TEXT to state [9]
+
+-------------------
+lalr_state [9]: {
+  [label ::= TEXT (*) , {VAR PTR END_STRUCT TERM EQUAL POINT }]
+}
+
+-------------------
+lalr_state [10]: {
+  [instance ::= instanciation (*) , {TEXT PRINT }]
+}
+
+-------------------
+lalr_state [11]: {
+  [assignement ::= label (*) POINT label EQUAL quotedWords TERM , {TEXT PRINT }]
+  [instanciation ::= label (*) EQUAL NEW label TERM , {TEXT PRINT }]
+  [assignement ::= label (*) POINT label EQUAL label TERM , {TEXT PRINT }]
+}
+transition on EQUAL to state [14]
+transition on POINT to state [13]
+
+-------------------
+lalr_state [12]: {
+  [instance ::= assignement (*) , {TEXT PRINT }]
+}
+
+-------------------
+lalr_state [13]: {
+  [assignement ::= label POINT (*) label EQUAL quotedWords TERM , {TEXT PRINT }]
+  [label ::= (*) TEXT , {EQUAL }]
+  [assignement ::= label POINT (*) label EQUAL label TERM , {TEXT PRINT }]
+}
+transition on label to state [18]
+transition on TEXT to state [9]
+
+-------------------
+lalr_state [14]: {
+  [instanciation ::= label EQUAL (*) NEW label TERM , {TEXT PRINT }]
+}
+transition on NEW to state [15]
+
+-------------------
+lalr_state [15]: {
+  [instanciation ::= label EQUAL NEW (*) label TERM , {TEXT PRINT }]
+  [label ::= (*) TEXT , {TERM }]
+}
+transition on label to state [16]
+transition on TEXT to state [9]
+
+-------------------
+lalr_state [16]: {
+  [instanciation ::= label EQUAL NEW label (*) TERM , {TEXT PRINT }]
+}
+transition on TERM to state [17]
+
+-------------------
+lalr_state [17]: {
+  [instanciation ::= label EQUAL NEW label TERM (*) , {TEXT PRINT }]
+}
+
+-------------------
+lalr_state [18]: {
+  [assignement ::= label POINT label (*) EQUAL quotedWords TERM , {TEXT PRINT }]
+  [assignement ::= label POINT label (*) EQUAL label TERM , {TEXT PRINT }]
+}
+transition on EQUAL to state [19]
+
+-------------------
+lalr_state [19]: {
+  [assignement ::= label POINT label EQUAL (*) quotedWords TERM , {TEXT PRINT }]
+  [quotedWords ::= (*) DOUBLE_QUOTE words DOUBLE_QUOTE , {TERM }]
+  [assignement ::= label POINT label EQUAL (*) label TERM , {TEXT PRINT }]
+  [label ::= (*) TEXT , {TERM }]
+}
+transition on DOUBLE_QUOTE to state [22]
+transition on quotedWords to state [21]
+transition on label to state [20]
+transition on TEXT to state [9]
+
+-------------------
+lalr_state [20]: {
+  [assignement ::= label POINT label EQUAL label (*) TERM , {TEXT PRINT }]
+}
+transition on TERM to state [27]
+
+-------------------
+lalr_state [21]: {
+  [assignement ::= label POINT label EQUAL quotedWords (*) TERM , {TEXT PRINT }]
+}
+transition on TERM to state [26]
+
+-------------------
+lalr_state [22]: {
+  [words ::= (*) words TEXT , {TEXT DOUBLE_QUOTE }]
+  [words ::= (*) , {TEXT DOUBLE_QUOTE }]
+  [quotedWords ::= DOUBLE_QUOTE (*) words DOUBLE_QUOTE , {TERM }]
+}
+transition on words to state [23]
+
+-------------------
+lalr_state [23]: {
+  [quotedWords ::= DOUBLE_QUOTE words (*) DOUBLE_QUOTE , {TERM }]
+  [words ::= words (*) TEXT , {TEXT DOUBLE_QUOTE }]
+}
+transition on DOUBLE_QUOTE to state [25]
+transition on TEXT to state [24]
+
+-------------------
+lalr_state [24]: {
+  [words ::= words TEXT (*) , {TEXT DOUBLE_QUOTE }]
+}
+
+-------------------
+lalr_state [25]: {
+  [quotedWords ::= DOUBLE_QUOTE words DOUBLE_QUOTE (*) , {TERM }]
+}
+
+-------------------
+lalr_state [26]: {
+  [assignement ::= label POINT label EQUAL quotedWords TERM (*) , {TEXT PRINT }]
+}
+
+-------------------
+lalr_state [27]: {
+  [assignement ::= label POINT label EQUAL label TERM (*) , {TEXT PRINT }]
+}
+
+-------------------
+lalr_state [28]: {
+  [print ::= PRINT label (*) TERM , {EOF }]
+}
+transition on TERM to state [29]
+
+-------------------
+lalr_state [29]: {
+  [print ::= PRINT label TERM (*) , {EOF }]
+}
+
+-------------------
+lalr_state [30]: {
+  [dataModels ::= (*) , {VAR PTR END_STRUCT }]
+  [structModel ::= STRUCT label (*) dataModels END_STRUCT , {TEXT STRUCT PRINT }]
+  [dataModels ::= (*) dataModels dataModel , {VAR PTR END_STRUCT }]
+}
+transition on dataModels to state [31]
+
+-------------------
+lalr_state [31]: {
+  [dataModel ::= (*) PTR label TERM , {VAR PTR END_STRUCT }]
+  [dataModel ::= (*) VAR label TERM , {VAR PTR END_STRUCT }]
+  [structModel ::= STRUCT label dataModels (*) END_STRUCT , {TEXT STRUCT PRINT }]
+  [dataModels ::= dataModels (*) dataModel , {VAR PTR END_STRUCT }]
+}
+transition on END_STRUCT to state [35]
+transition on PTR to state [34]
+transition on dataModel to state [33]
+transition on VAR to state [32]
+
+-------------------
+lalr_state [32]: {
+  [dataModel ::= VAR (*) label TERM , {VAR PTR END_STRUCT }]
+  [label ::= (*) TEXT , {TERM }]
+}
+transition on label to state [38]
+transition on TEXT to state [9]
+
+-------------------
+lalr_state [33]: {
+  [dataModels ::= dataModels dataModel (*) , {VAR PTR END_STRUCT }]
+}
+
+-------------------
+lalr_state [34]: {
+  [dataModel ::= PTR (*) label TERM , {VAR PTR END_STRUCT }]
+  [label ::= (*) TEXT , {TERM }]
+}
+transition on label to state [36]
+transition on TEXT to state [9]
+
+-------------------
+lalr_state [35]: {
+  [structModel ::= STRUCT label dataModels END_STRUCT (*) , {TEXT STRUCT PRINT }]
+}
+
+-------------------
+lalr_state [36]: {
+  [dataModel ::= PTR label (*) TERM , {VAR PTR END_STRUCT }]
+}
+transition on TERM to state [37]
+
+-------------------
+lalr_state [37]: {
+  [dataModel ::= PTR label TERM (*) , {VAR PTR END_STRUCT }]
+}
+
+-------------------
+lalr_state [38]: {
+  [dataModel ::= VAR label (*) TERM , {VAR PTR END_STRUCT }]
+}
+transition on TERM to state [39]
+
+-------------------
+lalr_state [39]: {
+  [dataModel ::= VAR label TERM (*) , {VAR PTR END_STRUCT }]
+}
+
+-------------------
+lalr_state [40]: {
+  [$START ::= file EOF (*) , {EOF }]
 }
 
 -------------------
 -------- ACTION_TABLE --------
 From state #0
- [term 4:SHIFT(to state 1)]
+ [term 4:REDUCE(with prod 15)] [term 5:REDUCE(with prod 15)]
+ [term 12:REDUCE(with prod 15)]
 From state #1
- [term 0:REDUCE(with prod 0)]
+ [term 0:SHIFT(to state 40)]
 From state #2
- [term 0:SHIFT(to state 3)]
+ [term 4:REDUCE(with prod 2)] [term 5:SHIFT(to state 4)]
+ [term 12:REDUCE(with prod 2)]
 From state #3
+ [term 4:REDUCE(with prod 16)] [term 5:REDUCE(with prod 16)]
+ [term 12:REDUCE(with prod 16)]
+From state #4
+ [term 4:SHIFT(to state 9)]
+From state #5
+ [term 4:SHIFT(to state 9)] [term 12:SHIFT(to state 8)]
+From state #6
+ [term 4:REDUCE(with prod 3)] [term 12:REDUCE(with prod 3)]
+From state #7
+ [term 0:REDUCE(with prod 0)]
+From state #8
+ [term 4:SHIFT(to state 9)]
+From state #9
+ [term 2:REDUCE(with prod 6)] [term 3:REDUCE(with prod 6)]
+ [term 6:REDUCE(with prod 6)] [term 7:REDUCE(with prod 6)]
+ [term 8:REDUCE(with prod 6)] [term 9:REDUCE(with prod 6)]
+From state #10
+ [term 4:REDUCE(with prod 4)] [term 12:REDUCE(with prod 4)]
+From state #11
+ [term 8:SHIFT(to state 14)] [term 9:SHIFT(to state 13)]
+From state #12
+ [term 4:REDUCE(with prod 5)] [term 12:REDUCE(with prod 5)]
+From state #13
+ [term 4:SHIFT(to state 9)]
+From state #14
+ [term 10:SHIFT(to state 15)]
+From state #15
+ [term 4:SHIFT(to state 9)]
+From state #16
+ [term 7:SHIFT(to state 17)]
+From state #17
+ [term 4:REDUCE(with prod 17)] [term 12:REDUCE(with prod 17)]
+From state #18
+ [term 8:SHIFT(to state 19)]
+From state #19
+ [term 4:SHIFT(to state 9)] [term 11:SHIFT(to state 22)]
+From state #20
+ [term 7:SHIFT(to state 27)]
+From state #21
+ [term 7:SHIFT(to state 26)]
+From state #22
+ [term 4:REDUCE(with prod 7)] [term 11:REDUCE(with prod 7)]
+From state #23
+ [term 4:SHIFT(to state 24)] [term 11:SHIFT(to state 25)]
+From state #24
+ [term 4:REDUCE(with prod 8)] [term 11:REDUCE(with prod 8)]
+From state #25
+ [term 7:REDUCE(with prod 9)]
+From state #26
+ [term 4:REDUCE(with prod 18)] [term 12:REDUCE(with prod 18)]
+From state #27
+ [term 4:REDUCE(with prod 19)] [term 12:REDUCE(with prod 19)]
+From state #28
+ [term 7:SHIFT(to state 29)]
+From state #29
+ [term 0:REDUCE(with prod 20)]
+From state #30
+ [term 2:REDUCE(with prod 10)] [term 3:REDUCE(with prod 10)]
+ [term 6:REDUCE(with prod 10)]
+From state #31
+ [term 2:SHIFT(to state 32)] [term 3:SHIFT(to state 34)]
+ [term 6:SHIFT(to state 35)]
+From state #32
+ [term 4:SHIFT(to state 9)]
+From state #33
+ [term 2:REDUCE(with prod 11)] [term 3:REDUCE(with prod 11)]
+ [term 6:REDUCE(with prod 11)]
+From state #34
+ [term 4:SHIFT(to state 9)]
+From state #35
+ [term 4:REDUCE(with prod 14)] [term 5:REDUCE(with prod 14)]
+ [term 12:REDUCE(with prod 14)]
+From state #36
+ [term 7:SHIFT(to state 37)]
+From state #37
+ [term 2:REDUCE(with prod 13)] [term 3:REDUCE(with prod 13)]
+ [term 6:REDUCE(with prod 13)]
+From state #38
+ [term 7:SHIFT(to state 39)]
+From state #39
+ [term 2:REDUCE(with prod 12)] [term 3:REDUCE(with prod 12)]
+ [term 6:REDUCE(with prod 12)]
+From state #40
  [term 0:REDUCE(with prod 1)]
 ------------------------------
 -------- REDUCE_TABLE --------
 From state #0
- [non term 5->state 2]
+ [non term 0->state 1] [non term 2->state 2]
 From state #1
 From state #2
+ [non term 3->state 3] [non term 6->state 5]
 From state #3
+From state #4
+ [non term 9->state 30]
+From state #5
+ [non term 1->state 6] [non term 9->state 11] [non term 10->state 7]
+ [non term 11->state 10] [non term 12->state 12]
+From state #6
+From state #7
+From state #8
+ [non term 9->state 28]
+From state #9
+From state #10
+From state #11
+From state #12
+From state #13
+ [non term 9->state 18]
+From state #14
+From state #15
+ [non term 9->state 16]
+From state #16
+From state #17
+From state #18
+From state #19
+ [non term 8->state 21] [non term 9->state 20]
+From state #20
+From state #21
+From state #22
+ [non term 7->state 23]
+From state #23
+From state #24
+From state #25
+From state #26
+From state #27
+From state #28
+From state #29
+From state #30
+ [non term 4->state 31]
+From state #31
+ [non term 5->state 33]
+From state #32
+ [non term 9->state 38]
+From state #33
+From state #34
+ [non term 9->state 36]
+From state #35
+From state #36
+From state #37
+From state #38
+From state #39
+From state #40
 -----------------------------

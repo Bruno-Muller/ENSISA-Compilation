@@ -17,7 +17,7 @@ public class Main {
     	Lexer l = new Lexer(new FileReader(name));
     	l.setSymbolFactory(csf);
     	Parser p = new Parser(l, csf);
-    	p.parse();      
+    	p.parse();
     } catch (Exception e) {
     	e.printStackTrace();
     }

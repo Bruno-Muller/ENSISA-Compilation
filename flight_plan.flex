@@ -23,6 +23,6 @@
 "VAR"						{ return getSymbolFactory().newSymbol ("VAR", Sym.VAR); }  
 "PTR"						{ return getSymbolFactory().newSymbol ("PTR", Sym.PTR); }    
    
-[A-Za-z_][A-Za-z_0-9]*		{ return getSymbolFactory().newSymbol ("TEXT", Sym.TEXT, yytext()); }
+[A-Za-z_0-9\-]+		{ return getSymbolFactory().newSymbol ("TEXT", Sym.TEXT, yytext()); }
    
 [^]                    		{ throw new Error("Illegal character <"+yytext()+">"); }

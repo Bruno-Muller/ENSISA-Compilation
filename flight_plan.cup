@@ -1,12 +1,16 @@
 package chevalier_muller;
 
+import model.Assignement;
+import model.DataModel;
+import model.DataModels;
+import model.DataType;
+import model.Instances;
+import model.Instanciation;
 import model.StructModel;
-import model.Struct;
+import model.StructModels;
 
 parser code {:
 
-	private StructModel currentStructModel = null;
-    
     public void report_error(String message, Object info) {
         StringBuffer m = new StringBuffer("Error");
 		m.append (info.toString());
@@ -17,15 +21,6 @@ parser code {:
     public void report_fatal_error(String message, Object info) {
         report_error(message, info);
         System.exit(1);
-    }
-    
-    public StructModel createStructModel(String name) {
-    	this.currentStructModel = StructModel.createStructModel(name);
-    	return this.currentStructModel;
-    }
-    
-    public StructModel getStructModel() {
-    	return this.currentStructModel;
     }
 
 :}
@@ -40,33 +35,56 @@ terminal NEW;
 terminal DOUBLE_QUOTE;
 terminal PRINT;
    
-nonterminal StructureModel, DataModels, DataModel;
-nonterminal String Words, QuotedWords, Label;
-nonterminal Structure, Assignement;
-nonterminal ToString;
+nonterminal file, instance;
+nonterminal StructModels structModels;
+nonterminal StructModel structModel;
+nonterminal DataModels dataModels;
+nonterminal DataModel dataModel;
+nonterminal Instances instances;
+nonterminal String words, quotedWords, label, print;
+nonterminal Instanciation instanciation;
+nonterminal Assignement assignement;
 
-Label			::= 	TEXT:text					{: RESULT = text; :} ;
+file 			::=	structModels:sms instances:is print:l {: is.setStructModels(sms); System.out.println(is.get(l).toString()); :} ;
+				
+instances		::= 						{: RESULT = new Instances(); :}
+				| instances:is instance:i	{:
+												if (i instanceof Assignement) is.assign((Assignement) i);
+												if (i instanceof Instanciation) is.instanciate((Instanciation) i);
+												RESULT = is;
+											:}
+				;
 
-Words			::= 								{: RESULT = ""; :}
-				|		Words:words TEXT:text		{: RESULT = words + " " + text; :}
+instance		::= 	instanciation:s	{: RESULT = s; :}
+				| 		assignement:a	{: RESULT = a; :}
 				;
 				
-QuotedWords		::=		DOUBLE_QUOTE Words:words DOUBLE_QUOTE	{: RESULT = words; :} ;
+label			::= 	TEXT:t	{: RESULT = t; :} ;
 
-DataModels		::=	
-				|		DataModels DataModel
+words			::= 					{: RESULT = ""; :}
+				|		words:w TEXT:t	{: RESULT = w + " " + t; :}
+				;
+				
+quotedWords		::=		DOUBLE_QUOTE words:w DOUBLE_QUOTE	{: RESULT = w; :} ;
+
+dataModels		::=									{: RESULT = new DataModels(); :}
+				|		dataModels:dms dataModel:dm	{: dms.put(dm); RESULT = dms; :}
 				;		
 
-DataModel		::=		VAR Label:label TERM			{: getStructModel().putValue(label); :}
-				|		PTR Label:label TERM			{: getStructModel().putPointer(label); :}
+dataModel		::=		VAR label:l TERM	{: RESULT = new DataModel(l, DataType.VAR); :}
+				|		PTR label:l TERM	{: RESULT = new DataModel(l, DataType.PTR); :}
 				;
 
-StructureModel	::= 	STRUCT Label:structModelName DataModels END_STRUCT			{: createStructModel(structModelName); :};
+structModel		::= 	STRUCT label:l dataModels:dms END_STRUCT	{: RESULT = new StructModel(l, dms); :};
 
-Structure		::= 	Label:structName EQUAL NEW Label:structModelName TERM		{: Struct.createStruct(structName, structModelName); :};
+structModels 	::= 									{: RESULT = new StructModels(); :}
+				| 		structModels:sms structModel:sm	{: sms.put(sm); RESULT = sms; :}
+				;
 
-Assignement		::=		Label:structName POINT Label:key EQUAL QuotedWords:val TERM	{: Struct.getStruct(structName).put(key, val); :}
-				|		Label:structName POINT Label:key EQUAL Label:val TERM		{: Struct.getStruct(structName).put(key, val); :}
+instanciation	::= 	label:structName EQUAL NEW label:structModelName TERM		{: RESULT = new Instanciation(structName, structModelName); :};
+
+assignement		::=		label:structName POINT label:key EQUAL quotedWords:val TERM	{: RESULT = new Assignement(structName, key, val); :}
+				|		label:structName POINT label:key EQUAL label:val TERM		{: RESULT = new Assignement(structName, key, val); :}
 				;
 				
-ToString		::= 	PRINT Label:label TERM		{: System.out.println(Struct.getStruct(label).toString()); :};
+print			::= 	PRINT label:l TERM		{: RESULT = l; :};
