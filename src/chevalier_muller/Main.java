@@ -58,20 +58,7 @@ public class Main {
 				}
 				else
 				{
-					writer.print("<li>");
-					String[] words = line[l].toString().split(" ");
-					for(int w=0; w<words.length;w++)
-					{
-						if(w==0)
-						{
-							writer.print("<span class=\"uppercase\">"+words[w]+"</span> ");
-						}
-						else
-						{
-							writer.print(words[w]+" ");
-						}
-					}
-					writer.print("</li>");
+					writer.println("<li>"+line[l]+"</li>");
 				}
 			}
 			writer.println("</ul>");

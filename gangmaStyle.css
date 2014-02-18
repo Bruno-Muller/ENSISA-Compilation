@@ -45,9 +45,11 @@ li
 ul li
 {
 	list-style-type : none;
+	text-transform: capitalize;
 }
 
-.uppercase
+ul:last-child
 {
-	text-transform: uppercase;
+	visibility: hidden;
 }
+
