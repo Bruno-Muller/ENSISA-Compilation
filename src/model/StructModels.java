@@ -15,6 +15,8 @@ public class StructModels {
 	}
 	
 	public StructModel get(String label) {
+		if (!this.structModels.containsKey(label)) throw new RuntimeException(label + " is not a StructModel");
+		
 		return this.structModels.get(label);
 	}
 
