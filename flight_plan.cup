@@ -45,7 +45,7 @@ nonterminal String words, quotedWords, label, print;
 nonterminal Instanciation instanciation;
 nonterminal Assignement assignement;
 
-file 			::=	structModels:sms instances:is print:l {: is.setStructModels(sms); System.out.println(is.get(l).toString()); :} ;
+file 			::=	structModels:sms instances:is print:l {: is.setStructModels(sms); System.out.println(is.get(l).toString()); Main.printInstance(is.get(l)); :} ;
 				
 instances		::= 						{: RESULT = new Instances(); :}
 				| instances:is instance:i	{:

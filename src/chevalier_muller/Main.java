@@ -1,6 +1,11 @@
 package chevalier_muller;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+
+import model.Instance;
 import java_cup.runtime.ComplexSymbolFactory;
 
 public class Main {
@@ -22,4 +27,57 @@ public class Main {
     	e.printStackTrace();
     }
   }
+	
+	public static void printInstance(Instance i)
+	{
+		String data = i.toString();
+		PrintWriter writer = null;
+		try {
+			writer = new PrintWriter("flight_plan.html", "UTF-8");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		writer.println("<!DOCTYPE html><html><head><link rel=\"stylesheet\" href=\"gangmaStyle.css\"><title>Flight Plan : MULLER & CHEVALIER</title></head><body><div id=\"content\">");
+		writer.println("<h1>Demonstration projet compilation : FLIGHT PLAN</h1>");
+		writer.println("<h2>by MULLER & CHEVALIER | 3A-IR ENSISA 2014</h2>");
+		
+		String[] paragraph = data.split("\n\n");
+		for(int p = 0;p<paragraph.length;p++)
+		{
+			writer.println("<ul>");
+			String[] line = paragraph[p].toString().split("\n");
+			for(int l = 0;l<line.length;l++)
+			{
+				if(l==0)
+				{
+					writer.println("<li><h3>"+line[l]+"</h3></li>");
+				}
+				else
+				{
+					writer.print("<li>");
+					String[] words = line[l].toString().split(" ");
+					for(int w=0; w<words.length;w++)
+					{
+						if(w==0)
+						{
+							writer.print("<span class=\"uppercase\">"+words[w]+"</span> ");
+						}
+						else
+						{
+							writer.print(words[w]+" ");
+						}
+					}
+					writer.print("</li>");
+				}
+			}
+			writer.println("</ul>");
+		}
+		writer.println("</div></body></html>");
+		writer.close();
+		System.out.println(i);
+	}
 }

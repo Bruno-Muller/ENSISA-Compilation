@@ -38,7 +38,11 @@ public class Instance {
 	}
 	
 	@Override
-	public String toString() {
+	public String toString()
+	{
+		
+		/*
+		// Version détaillé des élèments manipulés
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append(this.label);
@@ -62,15 +66,41 @@ public class Instance {
 				sb.append(" and has value :\n");
 				sb.append(Instances.get(this.data.get(key)).toString());
 			}
-			
-			
 		}
 		
 		sb.append("\n");
-		
-
-		
+			
 		return sb.toString();
+		*/
+		
+		
+		// Version standard :
+		StringBuilder sbb = new StringBuilder();
+		
+		for (String key : this.data.keySet())
+		{
+			sbb.append(key);
+			
+			DataType dt = this.sm.getType(key);
+			
+			if (dt == DataType.VAR) {
+				sbb.append(" : ");
+				sbb.append(this.data.get(key));
+				sbb.append("\n");
+			}
+			else if (dt == DataType.PTR) {
+				sbb.append(" informations :\n");
+				sbb.append(Instances.get(this.data.get(key)).toString());
+			}
+			
+		}
+		
+		sbb.append("\n");
+
+		return sbb.toString();
 	}
+	
+	
+	
 
 }
