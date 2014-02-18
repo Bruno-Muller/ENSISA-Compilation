@@ -1,0 +1,53 @@
+*
+{
+	padding: 0;
+	margin : 0;
+}
+
+h1
+{
+	text-align: center;
+}
+
+h2
+{
+	text-align: center;
+}
+
+body
+{
+	width : 70%;
+	height: 95%;
+	margin: 5px auto;
+	background-color: #888;
+	border: 5px solid #333;
+}
+
+#content
+{
+	background-color: #77C;
+	padding: 10px;
+}
+
+ul
+{
+	border : 1px solid black;
+	padding: 5px;
+	margin : 5px;
+	background-color: #CCF;
+}
+
+li
+{
+	margin-left : 5px;
+}
+
+ul li
+{
+	list-style-type : none;
+}
+
+.uppercase
+{
+	text-transform: uppercase;
+}
